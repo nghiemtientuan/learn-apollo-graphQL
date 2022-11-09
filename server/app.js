@@ -6,9 +6,12 @@ const mongoose = require('mongoose')
 const typeDefs = require('./schema/schema')
 const resolvers = require('./resolver/resolver')
 
+// Load db methods, repository
+const mongoDataMethods = require('./repository/repository')
+
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb+srv://nghiemtuan:Aa@123456@graphql.zqtqqie.mongodb.net/?retryWrites=true&w=majority', {
+    await mongoose.connect('mongodb+srv://nghiemtuan:Aa%40123456@graphql.zqtqqie.mongodb.net/graphql?retryWrites=true&w=majority', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
@@ -24,7 +27,9 @@ async function startServer() {
   await connectDB()
   const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    // Truyen method db to resolver - param 3
+    context: () => ({ mongoDataMethods })
   })
   await server.start();
 
